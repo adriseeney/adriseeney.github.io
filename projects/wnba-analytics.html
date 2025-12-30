@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Case Study: YouTube API Analytics Pipeline (WNBA)</title>
+  <meta name="description" content="Built a production-style analytics pipeline using the YouTube API to transform raw engagement data into trusted, decision-ready BI metrics." />
+  <style>
+    :root { --max: 900px; }
+    body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; line-height: 1.55; }
+    header, main, footer { max-width: var(--max); margin: 0 auto; padding: 24px; }
+    header { padding-top: 40px; }
+    .eyebrow { letter-spacing: .08em; text-transform: uppercase; font-size: 12px; opacity: .75; }
+    h1 { font-size: 34px; margin: 10px 0 0; line-height: 1.15; }
+    h2 { font-size: 20px; margin-top: 28px; }
+    h3 { font-size: 16px; margin-top: 18px; }
+    p { margin: 10px 0; }
+    ul { margin: 10px 0 10px 22px; }
+    li { margin: 6px 0; }
+    .tagrow { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+    .tag { border: 1px solid #ddd; padding: 6px 10px; border-radius: 999px; font-size: 12px; }
+    .card { border: 1px solid #e5e5e5; border-radius: 14px; padding: 18px; margin-top: 14px; background: #fff; }
+    code, pre { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    pre { overflow: auto; padding: 14px; border: 1px solid #eee; border-radius: 12px; background: #fafafa; }
+    .small { font-size: 13px; opacity: .85; }
+    .divider { height: 1px; background: #eee; margin: 22px 0; }
+    a { color: inherit; }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="eyebrow">Case Study • Analytics Engineering • Social Media BI</div>
+    <h1>YouTube API Analytics Pipeline for Fan Engagement Insights</h1>
+    <p class="small">
+      Built a production-style analytics pipeline to ingest, validate, and model
+      YouTube engagement data as a trusted BI asset rather than ad-hoc API pulls.
+    </p>
+
+    <div class="tagrow">
+      <span class="tag">API Ingestion</span>
+      <span class="tag">Analytics Engineering</span>
+      <span class="tag">ELT Pipelines</span>
+      <span class="tag">Data Quality</span>
+      <span class="tag">Orchestration</span>
+      <span class="tag">Operational BI</span>
+    </div>
+  </header>
+
+  <main>
+    <section class="card">
+      <h2>Business Context</h2>
+      <p>
+        In a digital-first sports economy, fan engagement across platforms like YouTube
+        serves as a leading indicator of audience growth, content performance, and brand momentum.
+        However, social engagement data is high-volume, time-sensitive, and subject to API instability,
+        making manual analysis unreliable at scale.
+      </p>
+      <p>
+        This project treats YouTube engagement data as a <strong>production analytics input</strong>,
+        requiring automated ingestion, standardized transformations, and validation before it reaches reporting.
+      </p>
+    </section>
+
+    <section class="card">
+        <h2>Architecture Overview</h2>
+        <p class="small">
+          High-level view of the YouTube API analytics pipeline, from ingestion through
+          validation and BI consumption.
+        </p>
+      
+        <img
+          src="../img/project_architecture1.png"
+          alt="YouTube API analytics pipeline architecture"
+          style="max-width: 100%; height: auto; border: 1px solid #eee; border-radius: 14px; padding: 6px;"
+        />
+      </section>
+
+    <section class="card">
+      <h2>Problem</h2>
+      <p>
+        Ad-hoc API pulls and manually maintained dashboards introduce silent metric drift,
+        inconsistent time-series comparisons, and low confidence in analytics.
+      </p>
+      <ul>
+        <li>Unreliable engagement trends due to inconsistent ingestion</li>
+        <li>Schema and metadata volatility from the YouTube API</li>
+        <li>No automated validation of pipeline outputs</li>
+        <li>Fragile reporting dependent on manual refreshes</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>Solution</h2>
+      <p>
+        Designed and implemented a lightweight but production-oriented analytics pipeline
+        that automates ingestion, enforces data quality checks, and exposes
+        standardized engagement metrics for BI consumption.
+      </p>
+
+      <h3>Tooling</h3>
+      <ul>
+        <li><strong>Python</strong> for API ingestion, orchestration, and transformations</li>
+        <li><strong>YouTube Data API</strong> as the upstream data source</li>
+        <li><strong>PostgreSQL</strong> for raw, staging, and analytics tables</li>
+        <li><strong>SQL</strong> for modeling and metric standardization</li>
+        <li><strong>Power BI</strong> for reporting and trend analysis</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>Implementation Approach</h2>
+
+      <h3>1) Automated API Ingestion</h3>
+      <p>
+        Built Python scripts to ingest video-level engagement metrics
+        (views, likes, comments, publish timestamps) on a repeatable schedule.
+      </p>
+      <pre><code>Raw Metrics:
+- video_id
+- channel_id
+- published_at
+- view_count
+- like_count
+- comment_count
+- last_collected_timestamp</code></pre>
+
+      <h3>2) Data Modeling &amp; Standardization</h3>
+      <p>
+        Transformed raw API responses into standardized analytical tables,
+        enabling consistent time-series analysis and cross-video comparisons.
+      </p>
+
+      <h3>3) Data Quality &amp; Pipeline Validation</h3>
+      <p>
+        Implemented basic data quality checks to validate schema consistency,
+        null thresholds, and record freshness before metrics were exposed to BI.
+      </p>
+      <ul>
+        <li>Row count and freshness validation</li>
+        <li>Null and type checks on key engagement fields</li>
+        <li>Guardrails against partial or failed API pulls</li>
+      </ul>
+
+      <h3>4) BI-Ready Reporting Layer</h3>
+      <p>
+        Exposed modeled engagement data to Power BI, enabling reliable reporting
+        on content performance, posting cadence, and engagement trends over time.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>Impact</h2>
+      <ul>
+        <li><strong>Improved metric reliability:</strong> standardized engagement data with reduced drift</li>
+        <li><strong>Reduced manual effort:</strong> eliminated ad-hoc API pulls and spreadsheet workflows</li>
+        <li><strong>Scalable foundation:</strong> pipeline structured to support additional platforms and metrics</li>
+        <li><strong>Analytics confidence:</strong> enabled consistent, repeatable reporting for decision-making</li>
+      </ul>
+    </section>
+
+    <div class="divider"></div>
+
+    <section class="small">
+      <p><a href="../">← Back to Home</a> &nbsp;|&nbsp; <a href="./">Back to Projects</a></p>
+    </section>
+  </main>
+
+  <footer class="small" style="max-width: 900px; margin: 0 auto; padding: 24px;">
+    <div class="divider"></div>
+    <p>© <span id="year"></span> Adrianna Seeney</p>
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>

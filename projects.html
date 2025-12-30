@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Projects</title>
+
+  <style>
+    :root { --max: 980px; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      line-height: 1.5;
+      background: #fff;
+      color: #111;
+    }
+    .wrap { max-width: var(--max); margin: 0 auto; padding: 44px 22px; }
+
+    nav {
+      margin-bottom: 22px;
+      font-size: 14px;
+    }
+    nav a { color: inherit; text-decoration: none; border-bottom: 1px solid #ddd; }
+
+    h1 {
+      font-size: 48px;
+      margin: 0 0 10px;
+      letter-spacing: -0.02em;
+    }
+    .subhead {
+      max-width: 70ch;
+      font-size: 17px;
+      opacity: .9;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin-top: 32px;
+    }
+    @media (min-width: 920px) {
+      .grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    .card {
+      border: 1px solid #eee;
+      border-radius: 18px;
+      padding: 20px;
+      text-decoration: none;
+      color: inherit;
+      position: relative;
+      background: #fff;
+    }
+    .card:hover { border-color: #bbb; }
+
+    .kicker {
+      font-size: 12px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      opacity: .7;
+      margin-bottom: 8px;
+    }
+    .title {
+      font-size: 22px;
+      margin: 0 0 10px;
+      letter-spacing: -0.01em;
+    }
+    .desc {
+      margin: 0 0 12px;
+      opacity: .9;
+    }
+    .meta {
+      font-size: 13px;
+      opacity: .75;
+    }
+
+    footer {
+      margin-top: 42px;
+      padding-top: 18px;
+      border-top: 1px solid #eee;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 14px;
+      font-size: 13px;
+      opacity: .8;
+    }
+  </style>
+</head>
+
+<body>
+  <main class="wrap">
+    <nav>
+      <a href="../">← Home</a>
+    </nav>
+
+    <header>
+      <h1>Projects</h1>
+      <p class="subhead">
+        A selection of data products, analytics pipelines, and case studies.
+        These projects reflect how I think about systems, data quality, and real-world constraints—not just tools.
+      </p>
+    </header>
+
+    <section class="grid">
+      <a class="card" href="equicite.html">
+        <div class="kicker">Data product</div>
+        <h2 class="title">Academic Research Paper Repository</h2>
+        <p class="desc">
+          A full-stack prototype for discovering and organizing academic research,
+          focused on visibility, metadata quality, and search experience.
+        </p>
+        <p class="meta">HTML • JavaScript • Data modeling</p>
+      </a>
+
+      <a class="card" href="yt-youtube-api-pipeline.html">
+        <div class="kicker">Analytics engineering</div>
+        <h2 class="title">YouTube API Analytics Pipeline (WNBA)</h2>
+        <p class="desc">
+          A production-style pipeline that ingests YouTube engagement data,
+          validates it, and exposes reliable metrics for BI reporting.
+        </p>
+        <p class="meta">Python • APIs • SQL • Power BI</p>
+      </a>
+
+      <a class="card" href="dell-data-quality-case-study.html">
+        <div class="kicker">Case study</div>
+        <h2 class="title">Shift-Left Data Quality for Product Publishing</h2>
+        <p class="desc">
+          Reframed a customer-facing production issue as a data quality problem,
+          replacing manual QA with automated validation, remediation, and release readiness workflows.
+        </p>
+        <p class="meta">Python • SQLAlchemy • Data contracts • Power BI</p>
+      </a>
+    </section>
+
+    <footer>
+      <div>© <span id="year"></span> Adrianna Seeney</div>
+      <div>
+        <a href="../">Home</a>
+        &nbsp;•&nbsp;
+        <a href="https://www.linkedin.com/" target="_blank" rel="noreferrer">LinkedIn</a>
+        &nbsp;•&nbsp;
+        <a href="https://github.com/" target="_blank" rel="noreferrer">GitHub</a>
+      </div>
+    </footer>
+  </main>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>

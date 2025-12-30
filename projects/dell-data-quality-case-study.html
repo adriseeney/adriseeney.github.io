@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Case Study: Shift-Left Data Quality for Product Publishing (Dell)</title>
+  <meta name="description" content="Reframed a recurring production publishing defect as a data quality and observability problem; built Python/SQLAlchemy validation + remediation pipelines and Power BI operational dashboards (direct connection) to catch defects weeks before launch." />
+  <style>
+    :root { --max: 980px; }
+    body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; line-height: 1.55; }
+    header, main, footer { max-width: var(--max); margin: 0 auto; padding: 24px; }
+    header { padding-top: 44px; }
+    .eyebrow { letter-spacing: .08em; text-transform: uppercase; font-size: 12px; opacity: .75; }
+    h1 { font-size: 34px; margin: 10px 0 0; line-height: 1.15; }
+    h2 { font-size: 20px; margin-top: 28px; }
+    h3 { font-size: 16px; margin-top: 18px; }
+    p { margin: 10px 0; }
+    ul { margin: 10px 0 10px 22px; }
+    li { margin: 6px 0; }
+    .tagrow { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+    .tag { border: 1px solid #ddd; padding: 6px 10px; border-radius: 999px; font-size: 12px; }
+    .card { border: 1px solid #e5e5e5; border-radius: 14px; padding: 18px; margin-top: 14px; background: #fff; }
+    .grid { display: grid; grid-template-columns: 1fr; gap: 14px; }
+    @media (min-width: 980px) { .grid { grid-template-columns: 1fr 1fr; } }
+    code, pre { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    pre { overflow: auto; padding: 14px; border: 1px solid #eee; border-radius: 12px; background: #fafafa; }
+    .small { font-size: 13px; opacity: .85; }
+    .divider { height: 1px; background: #eee; margin: 22px 0; }
+    a { color: inherit; }
+    .kpi { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 12px; }
+    @media (min-width: 980px) { .kpi { grid-template-columns: repeat(3, 1fr); } }
+    .kpi .box { border: 1px solid #eee; border-radius: 14px; padding: 14px; background: #fff; }
+    .kpi .num { font-size: 20px; font-weight: 650; }
+    .kpi .lbl { font-size: 12px; opacity: .75; letter-spacing: .04em; text-transform: uppercase; }
+    .svgwrap { overflow-x: auto; }
+    .note { border-left: 4px solid #ddd; padding-left: 12px; margin: 10px 0; }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="eyebrow">Case Study • Data Quality • Release Readiness • Customer Experience</div>
+    <h1>Shift-Left Data Quality &amp; Observability for Customer-Facing Product Publishing</h1>
+    <p class="small">
+      Reframed a recurring production defect as a <strong>data product</strong> problem, then built a lightweight
+      <strong>Python + SQLAlchemy validation + remediation pipeline</strong> and <strong>Power BI operational dashboards</strong>
+      (direct connection to curated tables) to catch defects weeks before launch.
+    </p>
+
+    <div class="tagrow">
+      <span class="tag">Data Product</span>
+      <span class="tag">Shift-Left QA</span>
+      <span class="tag">Data Contracts</span>
+      <span class="tag">Rule-Based Validation</span>
+      <span class="tag">CDC-Style Drift Detection</span>
+      <span class="tag">Automated Remediation</span>
+      <span class="tag">Release Artifact Generation</span>
+      <span class="tag">Exception Reporting</span>
+      <span class="tag">Operational BI</span>
+      <span class="tag">Power BI DirectQuery / Live Connection</span>
+    </div>
+
+    <div class="kpi">
+      <div class="box">
+        <div class="num">3+ hrs/week → automated</div>
+        <div class="lbl">Manual QA toil reduced</div>
+      </div>
+      <div class="box">
+        <div class="num">T-3 weeks detection</div>
+        <div class="lbl">Earlier defect discovery</div>
+      </div>
+      <div class="box">
+        <div class="num">Single source of truth</div>
+        <div class="lbl">Cross-team alignment</div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="card">
+      <h2>Scenario</h2>
+      <p>
+        A production, customer-facing product configuration experience was repeatedly publishing incorrect product data,
+        leading to revenue-impacting errors and avoidable customer dissatisfaction.
+      </p>
+      <ul>
+        <li><strong>Sales errors:</strong> customers configured the wrong products due to incorrect bundles/attributes.</li>
+        <li><strong>Publishing failures:</strong> products failed to appear on the live site, reducing sell-through and revenue capture.</li>
+        <li><strong>Marcom &amp; compliance risk:</strong> product communications and disclosures were incorrect or non-compliant.</li>
+        <li><strong>Reactive detection:</strong> issues surfaced only after customer complaints or order cancellations.</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>Initial Framing (and Why It Didn’t Scale)</h2>
+      <p>
+        The issue was initially framed as a <strong>human-in-the-loop</strong> QA problem. The mitigation was a weekly
+        “scrub call” where large cross-functional groups manually clicked through a sandbox environment before pushing to production.
+      </p>
+      <ul>
+        <li><strong>High coordination cost:</strong> participation ballooned to 100+ people weekly.</li>
+        <li><strong>Low reliability:</strong> results depended on attendance and what pages people happened to inspect.</li>
+        <li><strong>High operational toil:</strong> ~3+ hours/week of repetitive manual validation.</li>
+      </ul>
+      <p>
+        This approach treated symptoms in the UI rather than addressing upstream data defects that were propagating downstream.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>My Reframe</h2>
+      <p>
+        I reframed the issue as a <strong>data quality</strong> and <strong>pipeline integrity</strong> problem:
+        if incorrect information reaches production, then upstream systems are producing or transforming incorrect data
+        without enforceable validation rules.
+      </p>
+      <p>
+        Product data was due from development teams at <strong>T-3 weeks</strong> before launch — meaning the data already existed
+        in upstream databases long before it reached the live site. That enabled a <strong>shift-left validation</strong> strategy:
+        validate the source-of-truth data early, continuously, and automatically.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>Solution</h2>
+      <p>
+        Built a lightweight <strong>data quality + release readiness workflow</strong> that:
+        (1) curated a set of <strong>data products</strong> representing high-risk product configurations,
+        (2) enforced <strong>data contracts</strong> and business-rule validations,
+        (3) generated <strong>exceptions</strong> for triage,
+        (4) automated <strong>remediation</strong> for known defect patterns, and
+        (5) produced <strong>launch-ready artifacts</strong> for downstream web publishing.
+      </p>
+
+      <div class="grid">
+        <div class="card">
+          <h3 style="margin-top:0;">Tooling</h3>
+          <ul>
+            <li><strong>Python</strong> for orchestration, validation logic, remediation, and automated runs</li>
+            <li><strong>SQLAlchemy</strong> (ORM + SQL) to query, transform, and materialize curated tables</li>
+            <li><strong>Azure Data Studio</strong> for SQL development, profiling, and rapid iteration</li>
+            <li><strong>Power BI</strong> dashboards with <strong>DirectQuery / live connection</strong> to curated tables</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3 style="margin-top:0;">Technical Concepts</h3>
+          <ul>
+            <li>Curated layer / “gold” tables (data product as a trusted interface)</li>
+            <li>Rule-based validation (referential integrity + allowed-value checks)</li>
+            <li>CDC-style drift monitoring (detect unexpected changes pre-release)</li>
+            <li>Exception management (failures with reason codes + ownership)</li>
+            <li>Operational observability (trend views + recurring defect patterns)</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Architecture (Visual)</h2>
+      <p class="small">
+        A simple end-to-end view of the flow: <strong>curate → validate → remediate → re-validate → publish readiness → monitor</strong>.
+        (This is inline SVG, so it works on GitHub Pages with no extra tooling.)
+      </p>
+
+      <div class="svgwrap card" style="padding: 12px;">
+        <svg width="1200" height="260" viewBox="0 0 1200 260" role="img" aria-label="Data quality and release readiness pipeline diagram">
+          <defs>
+            <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+              <path d="M0,0 L10,3 L0,6 Z" fill="#666"></path>
+            </marker>
+          </defs>
+
+          <!-- Boxes -->
+          <rect x="30"  y="50" width="200" height="70" rx="14" ry="14" fill="#fff" stroke="#ddd"/>
+          <text x="130" y="78" text-anchor="middle" font-size="14" fill="#111">Source DB</text>
+          <text x="130" y="98" text-anchor="middle" font-size="12" fill="#555">(Product data T-3)</text>
+
+          <rect x="270" y="50" width="220" height="70" rx="14" ry="14" fill="#fff" stroke="#ddd"/>
+          <text x="380" y="78" text-anchor="middle" font-size="14" fill="#111">Curated Data Product</text>
+          <text x="380" y="98" text-anchor="middle" font-size="12" fill="#555">Gold tables + audit fields</text>
+
+          <rect x="530" y="50" width="210" height="70" rx="14" ry="14" fill="#fff" stroke="#ddd"/>
+          <text x="635" y="78" text-anchor="middle" font-size="14" fill="#111">Validation Runner</text>
+          <text x="635" y="98" text-anchor="middle" font-size="12" fill="#555">Rules / contracts</text>
+
+          <rect x="780" y="20" width="200" height="70" rx="14" ry="14" fill="#fff" stroke="#ddd"/>
+          <text x="880" y="48" text-anchor="middle" font-size="14" fill="#111">Exceptions Table</text>
+          <text x="880" y="68" text-anchor="middle" font-size="12" fill="#555">Reason codes</text>
+
+          <rect x="780" y="110" width="200" height="70" rx="14" ry="14" fill="#fff" stroke="#ddd"/>
+          <text x="880" y="138" text-anchor="middle" font-size="14" fill="#111">Remediation Script</text>
+          <text x="880" y="158" text-anchor="middle" font-size="12" fill="#555">Deterministic fixes</text>
+
+          <rect x="1020" y="20" width="150" height="70" rx="14" ry="14" fill="#fff" stroke="#ddd"/>
+          <text x="1095" y="48" text-anchor="middle" font-size="14" fill="#111">Power BI</text>
+          <text x="1095" y="68" text-anchor="middle" font-size="12" fill="#555">DirectQuery</text>
+
+          <rect x="1020" y="110" width="150" height="70" rx="14" ry="14" fill="#fff" stroke="#ddd"/>
+          <text x="1095" y="138" text-anchor="middle" font-size="14" fill="#111">Readiness Files</text>
+          <text x="1095" y="158" text-anchor="middle" font-size="12" fill="#555">CSV / JSON handoff</text>
+
+          <!-- Arrows -->
+          <line x1="230" y1="85" x2="270" y2="85" stroke="#666" stroke-width="2" marker-end="url(#arrow)"/>
+          <line x1="490" y1="85" x2="530" y2="85" stroke="#666" stroke-width="2" marker-end="url(#arrow)"/>
+
+          <!-- From validation to exceptions/remediation -->
+          <line x1="740" y1="70" x2="780" y2="55" stroke="#666" stroke-width="2" marker-end="url(#arrow)"/>
+          <line x1="740" y1="100" x2="780" y2="125" stroke="#666" stroke-width="2" marker-end="url(#arrow)"/>
+
+          <!-- Exceptions to Power BI -->
+          <line x1="980" y1="55" x2="1020" y2="55" stroke="#666" stroke-width="2" marker-end="url(#arrow)"/>
+
+          <!-- Remediation to readiness files -->
+          <line x1="980" y1="145" x2="1020" y2="145" stroke="#666" stroke-width="2" marker-end="url(#arrow)"/>
+
+          <!-- Remediation back to validation (re-validate loop) -->
+          <path d="M880,180 C880,220 660,220 650,130" fill="none" stroke="#666" stroke-width="2" marker-end="url(#arrow)"/>
+          <text x="760" y="236" text-anchor="middle" font-size="12" fill="#555">re-validate</text>
+        </svg>
+      </div>
+
+      <p class="small note">
+        If you want this diagram to match your brand more, you can export an SVG from Figma, or I can generate a cleaner version
+        (same content, nicer spacing) once you decide the exact labels you want.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>Implementation Approach</h2>
+
+      <h3>1) Build the Data Products (Curated Tables)</h3>
+      <p>
+        Modeled the product experiences most frequently broken on the website as a curated dataset (a “data product”),
+        capturing key identifiers plus audit metadata to support traceability and change monitoring.
+      </p>
+      <pre><code>Data Product: product_software_mapping
+
+Columns:
+- product_id
+- product_name
+- software_id
+- software_name
+- last_modified_timestamp
+- source_system / channel (optional)
+- effective_date (optional)</code></pre>
+
+      <h3>2) Encode Business Rules as Data Contracts</h3>
+      <p>
+        Translated business expectations into explicit validation rules (a lightweight “data contract”) enforced at the database layer
+        so the “publishable” dataset matched intended product configuration logic.
+      </p>
+      <pre><code>Example contract rules:
+- product_id = 12345 must include software_ids {345, 678, 891}
+- software_id = 345 must map to software_name = "Microsoft"
+- software_id = 678 must map to software_name = "McAfee"
+- software_id = 891 must map to software_name = "CrowdStrike"</code></pre>
+
+      <h3>3) Automated Validation Pipeline (Python + SQLAlchemy)</h3>
+      <p>
+        Implemented a validation runner that queried curated tables, executed rule checks, and wrote results to an
+        exceptions table for downstream consumption — creating a repeatable, auditable quality gate that could be scheduled.
+      </p>
+      <pre><code>Validation Output Tables:
+- dq_results_summary (run_id, timestamp, pass_count, fail_count)
+- dq_exceptions (run_id, product_id, software_id, rule_id, status, reason_code, last_modified_timestamp)</code></pre>
+
+      <pre><code>Classification:
+IF product_id + software_id + software_name match contract
+  THEN PASS
+ELSE
+  FAIL with reason_code:
+    - missing_mapping
+    - unexpected_mapping
+    - name_mismatch
+    - stale_data / drift_detected</code></pre>
+
+      <h3>4) Power BI Dashboards (Direct Connection)</h3>
+      <p>
+        Built operational dashboards in Power BI using a direct connection to curated tables and exception outputs
+        so product managers and developers could monitor release readiness in near-real time.
+      </p>
+      <ul>
+        <li><strong>Release readiness:</strong> pass/fail by launch date, product line, and experience</li>
+        <li><strong>Exception backlog:</strong> failures ranked by severity and business impact</li>
+        <li><strong>Drift monitoring:</strong> recent changes to high-risk products (CDC-style visibility)</li>
+        <li><strong>Root cause support:</strong> audit metadata to trace defects back upstream</li>
+      </ul>
+    </section>
+
+    <!-- NEW SECTION: Automation & Release Enablement -->
+    <section class="card">
+      <h2>Automation &amp; Release Enablement</h2>
+
+      <p>
+        In addition to validation and monitoring, I implemented automation workflows to close the loop between
+        data quality detection and downstream execution — reducing rework and making release readiness explicit.
+      </p>
+
+      <h3>Automated Remediation &amp; Enrichment</h3>
+      <p>
+        When validation checks surfaced failures, a secondary <strong>Python-based remediation process</strong> applied
+        deterministic correction and enrichment logic to resolve known, well-understood defect patterns upstream.
+      </p>
+      <ul>
+        <li>Rule-based correction of missing or incorrect product attributes</li>
+        <li>Deterministic mapping to authoritative reference values (“golden record” behavior)</li>
+        <li>Standardization of product/software metadata for consistent downstream consumption</li>
+        <li>Re-validation of remediated records to ensure contract compliance</li>
+      </ul>
+
+      <pre><code>Remediation Control Loop:
+1. Detect validation failure
+2. Classify failure type (missing, mismatch, drift)
+3. Apply deterministic correction / enrichment rules
+4. Re-run validation checks
+5. Persist corrected record + audit metadata</code></pre>
+
+      <h3>Product Readiness Artifact Generation</h3>
+      <p>
+        Once records passed validation, the pipeline generated <strong>product readiness artifacts</strong> in standardized,
+        contract-compliant formats required by the web development team. These artifacts served as a clean handoff boundary
+        between data workflows and application publishing workflows.
+      </p>
+      <ul>
+        <li>Structured files (e.g., <strong>CSV / JSON</strong>) aligned to downstream schemas</li>
+        <li>Explicit inclusion of only “release-approved” configurations</li>
+        <li>Consistent typing/formatting to support direct ingestion (no manual cleanup)</li>
+        <li>Versioned outputs to support traceability and rollback</li>
+      </ul>
+
+      <pre><code>Release Artifact Characteristics:
+- Schema-aligned
+- Versioned
+- Source-of-truth backed
+- Launch-ready only (no partial / invalid records)</code></pre>
+
+      <h3>Pre-Release Quality Gate</h3>
+      <p>
+        Together, validation, remediation, and artifact generation formed a <strong>pre-release quality gate</strong>
+        ensuring only compliant, fully validated product data was eligible for publication. This shifted defect detection
+        upstream while reducing manual coordination and downstream rework.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>Impact</h2>
+      <ul>
+        <li><strong>Reduced manual QA toil:</strong> replaced weekly “scrub calls” with automated checks + exception triage.</li>
+        <li><strong>Shifted defect detection left:</strong> surfaced issues at T-3 weeks rather than after production release.</li>
+        <li><strong>Improved cross-functional execution:</strong> enabled PMs and developers to collaborate using a shared operational view.</li>
+        <li><strong>De-risked customer experience:</strong> fewer configuration errors, fewer cancellations, improved compliance confidence.</li>
+      </ul>
+      
+    </section>
+
+    <div class="divider"></div>
+
+    <section class="small">
+      <p><strong>Skills demonstrated:</strong> problem reframing, data modeling, SQL development, Python automation, rule translation, operational analytics, stakeholder enablement.</p>
+      <p><a href="../">← Back to Home</a> &nbsp;|&nbsp; <a href="./">Back to Projects</a></p>
+    </section>
+  </main>
+
+  <footer class="small" style="max-width: 980px; margin: 0 auto; padding: 24px;">
+    <div class="divider"></div>
+    <p>© <span id="year"></span> Adrianna Seeney</p>
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>

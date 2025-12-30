@@ -1,25 +1,213 @@
-<html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Adrianna Seeney</title>
+  <meta name="description" content="Adrianna Seeney — data + BI builder. Projects, case studies, research, and creative work." />
+
+  <style>
+    :root { --max: 980px; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      line-height: 1.5;
+      background: #fff;
+      color: #111;
+    }
+    .wrap { max-width: var(--max); margin: 0 auto; padding: 56px 22px; }
+
+    /* Hero */
+    .hero {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 18px;
+      align-items: start;
+      padding-bottom: 26px;
+      border-bottom: 1px solid #eee;
+    }
+    @media (min-width: 920px) {
+      .hero { grid-template-columns: 1.2fr .8fr; gap: 26px; }
+    }
+
+    h1 {
+      font-size: 56px;
+      line-height: 0.95;
+      margin: 0;
+      letter-spacing: -0.02em;
+    }
+    .subhead {
+      font-size: 18px;
+      max-width: 70ch;
+      margin: 10px 0 0;
+      opacity: .92;
+    }
+    .small { font-size: 13px; opacity: .78; }
+
+    .quicklinks {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 16px;
+    }
+    .linkbtn {
+      text-decoration: none;
+      color: inherit;
+      border: 1px solid #ddd;
+      border-radius: 999px;
+      padding: 10px 14px;
+      font-size: 14px;
+      background: #fff;
+    }
+    .linkbtn:hover { border-color: #aaa; }
+
+    /* Side note panel */
+    .aside {
+      border: 1px solid #eee;
+      border-radius: 18px;
+      padding: 18px;
+      background: linear-gradient(180deg, #fff, #fafafa);
+    }
+    .aside h2 { margin: 0 0 8px; font-size: 16px; letter-spacing: .02em; }
+    .aside p { margin: 0; }
+
+    /* Tiles */
+    .tiles {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+      margin-top: 26px;
+    }
+    @media (min-width: 920px) {
+      .tiles { grid-template-columns: 1fr 1fr; }
+    }
+    .tile {
+      border: 1px solid #eee;
+      border-radius: 18px;
+      padding: 18px;
+      text-decoration: none;
+      color: inherit;
+      position: relative;
+      overflow: hidden;
+      background: #fff;
+    }
+    .tile:hover { border-color: #bbb; }
+    .tile .kicker {
+      font-size: 12px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      opacity: .7;
+      margin-bottom: 8px;
+    }
+    .tile .title {
+      font-size: 20px;
+      margin: 0 0 8px;
+      letter-spacing: -0.01em;
+    }
+    .tile .desc { margin: 0; opacity: .9; }
+
+    /* subtle “accent” shapes (keeps it playful but not loud) */
+    .tile::after {
+      content: "";
+      position: absolute;
+      right: -60px;
+      top: -60px;
+      width: 160px;
+      height: 160px;
+      border-radius: 999px;
+      border: 1px solid #eee;
+      background: radial-gradient(circle at 30% 30%, #fafafa, #fff);
+      transform: rotate(12deg);
+    }
+
+    footer {
+      margin-top: 34px;
+      padding-top: 18px;
+      border-top: 1px solid #eee;
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    a { color: inherit; }
+  </style>
+</head>
 
 <body>
-  <h1>Adrianna Seeney</h1>
-  <p>Hello and Welcome to my website!</p>
-  <br>
-  <p> 
-    Hi, my name is Adrianna Seeney, I'm from Durham, North Carolina. I enjoy learning about the world through multiple disciplines.
-    I have bachelors in business and a masters in Finance and Decision Science. 
-    I enjoy math, science, and programming. I also enjoy creating graphic arts, remixing music to my preferered style, and reading research.
-    <br>
-    <br>
-    I specialize in Big Data Analytics, and Business Intelligence, but over thea years I have worked on a variety of related
-    areas across the data science, economics, marketing, finance, sales, and venture capital. 
-    Particuilary as tools to enable problem solving and competitive decision making in firms.
-    Much of what I know and about business, data, and technology was learned by navigating real problems and solving them. Theres no teacher like broken prod.
-    <br>
-    On this website you will find a bit of everythig. Open source projects, passion projects, case studies from my work, independent research, and some of my graphic arts. 
-    <br>
-    Thats it my friend. Do leave a message if you'd like. You can find my formal bio on my linkedin profile. 
-    
-  </p>
-</body>
+  <main class="wrap">
+    <section class="hero">
+      <div>
+        <h1>Adrianna<br/>Seeney</h1>
+        <p class="subhead">
+          I build analytics systems, data products, and BI foundations—then write about the real problems behind them.
+          From Durham, NC. Builder brain + creative side quests.
+        </p>
 
-<html>
+        <div class="quicklinks">
+          <a class="linkbtn" href="projects/">Projects →</a>
+          <!-- Replace these with your real URLs -->
+          <a class="linkbtn" href="https://www.linkedin.com/" target="_blank" rel="noreferrer">LinkedIn</a>
+          <a class="linkbtn" href="https://github.com/" target="_blank" rel="noreferrer">GitHub</a>
+        </div>
+
+        <p class="small" style="margin-top:14px;">
+          Interests: math • systems • programming • research • design • music remixing
+        </p>
+      </div>
+
+      <aside class="aside">
+        <h2>What I’m optimizing for</h2>
+        <p class="small" style="margin-bottom:10px;">
+          Reliable metrics. Clean handoffs. Less chaos.
+        </p>
+        <p class="small">
+          I like work that turns “we don’t trust the numbers” into pipelines that run on schedule, dashboards that hold up,
+          and teams that can move without guesswork.
+        </p>
+      </aside>
+    </section>
+
+    <section class="tiles">
+      <a class="tile" href="projects/">
+        <div class="kicker">Start here</div>
+        <h2 class="title">Projects</h2>
+        <p class="desc">Pipelines, dashboards, and data products (with writeups and architecture diagrams).</p>
+      </a>
+
+      <a class="tile" href="projects/">
+        <div class="kicker">Work samples</div>
+        <h2 class="title">Case Studies</h2>
+        <p class="desc">Problem → reframe → system design → automation → impact. The thinking behind the build.</p>
+      </a>
+
+      <a class="tile" href="projects/">
+        <div class="kicker">In progress</div>
+        <h2 class="title">Independent Research</h2>
+        <p class="desc">Experiments and notes—where curiosity turns into prototypes.</p>
+      </a>
+
+      <a class="tile" href="projects/">
+        <div class="kicker">Occasionally</div>
+        <h2 class="title">Creative Work</h2>
+        <p class="desc">Design and other side quests. Not the main thing, but always in the mix.</p>
+      </a>
+    </section>
+
+    <footer>
+      <div class="small">© <span id="year"></span> Adrianna Seeney</div>
+      <div class="small">
+        <a href="projects/">Projects</a>
+        &nbsp;•&nbsp;
+        <a href="https://www.linkedin.com/" target="_blank" rel="noreferrer">LinkedIn</a>
+        &nbsp;•&nbsp;
+        <a href="https://github.com/" target="_blank" rel="noreferrer">GitHub</a>
+      </div>
+    </footer>
+  </main>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
