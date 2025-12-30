@@ -3,205 +3,278 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Adrianna Seeney</title>
-  <meta name="description" content="Adrianna Seeney — data + BI builder. Projects, case studies, research, and creative work." />
+  <title>Adrianna Seeney — Projects</title>
+  <meta name="description" content="Projects by Adrianna Seeney — analytics engineering, BI systems, and data products." />
 
   <style>
     :root { --max: 980px; }
-    body {
-      margin: 0;
+    body{
+      margin:0;
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      line-height: 1.5;
-      background: #fff;
-      color: #111;
+      line-height:1.5;
+      background:#fff;
+      color:#111;
     }
-    .wrap { max-width: var(--max); margin: 0 auto; padding: 56px 22px; }
+    .wrap{ max-width: var(--max); margin:0 auto; padding: 52px 22px; }
 
-    /* Hero */
-    .hero {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 18px;
-      align-items: start;
-      padding-bottom: 26px;
-      border-bottom: 1px solid #eee;
+    header{ padding-bottom: 20px; border-bottom: 1px solid #eee; }
+    h1{
+      font-size: 52px;
+      margin:0 0 10px;
+      letter-spacing:-0.02em;
+      line-height: 1.0;
     }
-    @media (min-width: 920px) {
-      .hero { grid-template-columns: 1.2fr .8fr; gap: 26px; }
-    }
-
-    h1 {
-      font-size: 56px;
-      line-height: 0.95;
+    .sub{
+      max-width: 75ch;
       margin: 0;
-      letter-spacing: -0.02em;
+      opacity: .88;
+      font-size: 16px;
     }
-    .subhead {
-      font-size: 18px;
-      max-width: 70ch;
-      margin: 10px 0 0;
-      opacity: .92;
-    }
-    .small { font-size: 13px; opacity: .78; }
 
-    .quicklinks {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-top: 16px;
-    }
-    .linkbtn {
-      text-decoration: none;
-      color: inherit;
-      border: 1px solid #ddd;
-      border-radius: 999px;
-      padding: 10px 14px;
-      font-size: 14px;
-      background: #fff;
-    }
-    .linkbtn:hover { border-color: #aaa; }
-
-    /* Side note panel */
-    .aside {
-      border: 1px solid #eee;
-      border-radius: 18px;
-      padding: 18px;
-      background: linear-gradient(180deg, #fff, #fafafa);
-    }
-    .aside h2 { margin: 0 0 8px; font-size: 16px; letter-spacing: .02em; }
-    .aside p { margin: 0; }
-
-    /* Tiles */
-    .tiles {
-      display: grid;
+    .grid{
+      display:grid;
       grid-template-columns: 1fr;
-      gap: 14px;
+      gap: 16px;
       margin-top: 26px;
     }
-    @media (min-width: 920px) {
-      .tiles { grid-template-columns: 1fr 1fr; }
+    @media (min-width: 920px){
+      .grid{ grid-template-columns: 1fr 1fr; }
     }
-    .tile {
-      border: 1px solid #eee;
+
+    .card{
+      border:1px solid #eee;
       border-radius: 18px;
       padding: 18px;
-      text-decoration: none;
-      color: inherit;
-      position: relative;
-      overflow: hidden;
-      background: #fff;
+      text-decoration:none;
+      color:inherit;
+      background:#fff;
+      position:relative;
+      overflow:hidden;
     }
-    .tile:hover { border-color: #bbb; }
-    .tile .kicker {
-      font-size: 12px;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-      opacity: .7;
-      margin-bottom: 8px;
-    }
-    .tile .title {
-      font-size: 20px;
-      margin: 0 0 8px;
-      letter-spacing: -0.01em;
-    }
-    .tile .desc { margin: 0; opacity: .9; }
+    .card:hover{ border-color:#bbb; }
 
-    /* subtle “accent” shapes (keeps it playful but not loud) */
-    .tile::after {
-      content: "";
-      position: absolute;
-      right: -60px;
-      top: -60px;
-      width: 160px;
-      height: 160px;
-      border-radius: 999px;
+    .kicker{
+      font-size:12px;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      opacity:.7;
+      margin-bottom:8px;
+    }
+    .title{
+      font-size:22px;
+      margin:0 0 10px;
+      letter-spacing:-0.01em;
+    }
+    .desc{ margin:0 0 12px; opacity:.9; }
+    .meta{ margin:0; font-size:13px; opacity:.75; }
+
+    /* preview image */
+    .thumb{
+      margin-top: 12px;
       border: 1px solid #eee;
-      background: radial-gradient(circle at 30% 30%, #fafafa, #fff);
-      transform: rotate(12deg);
+      border-radius: 14px;
+      overflow: hidden;
+      background: #fafafa;
+    }
+    .thumb img{
+      display:block;
+      width:100%;
+      height:auto;
     }
 
-    footer {
-      margin-top: 34px;
-      padding-top: 18px;
+    footer{
+      margin-top: 40px;
+      padding-top: 16px;
       border-top: 1px solid #eee;
-      display: flex;
+      display:flex;
       justify-content: space-between;
-      gap: 14px;
       flex-wrap: wrap;
-      align-items: center;
+      gap: 12px;
+      font-size: 13px;
+      opacity: .8;
     }
-    a { color: inherit; }
+    footer a{ color:inherit; }
+    .headshots {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.headshot {
+  width: 180px;          /* consistent width */
+  height: 220px;         /* consistent height */
+  border: 1px solid #eee;
+  border-radius: 16px;
+  background: linear-gradient(180deg, #fafafa, #fff);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  opacity: .6;
+  position: relative;
+  overflow: hidden;
+}
+
+/* When you add real images */
+.headshot img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;     /* THIS ensures same height, clean crop */
+  object-position: center;
+  display: block;
+}
+.hero {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+@media (min-width: 920px) {
+  .hero {
+    grid-template-columns: 1.4fr 0.6fr;
+    gap: 36px;
+  }
+}
+
+.hero-text h1 {
+  font-size: 56px;
+  line-height: 0.95;
+  margin: 0 0 14px;
+  letter-spacing: -0.02em;
+}
+
+.about p {
+  max-width: 72ch;
+  margin: 0 0 12px;
+  opacity: 0.9;
+}
+
+.about p.small {
+  font-size: 13px;
+  opacity: 0.7;
+}
+
+.hero-shots {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.headshot {
+  width: 170px;
+  height: 210px;
+  border: 1px solid #eee;
+  border-radius: 16px;
+  background: linear-gradient(180deg, #fafafa, #fff);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  opacity: 0.9;
+  overflow: hidden;
+}
+
+/* When real images are added */
+.headshot img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+
   </style>
 </head>
 
 <body>
   <main class="wrap">
-    <section class="hero">
-      <div>
-        <h1>Adrianna<br/>Seeney</h1>
-        <p class="subhead">
-          I build analytics systems, data products, and BI foundations—then write about the real problems behind them.
-          From Durham, NC. Builder brain + creative side quests.
-        </p>
-
-        <div class="quicklinks">
-          <a class="linkbtn" href="projects/">Projects →</a>
-          <!-- Replace these with your real URLs -->
-          <a class="linkbtn" href="https://www.linkedin.com/" target="_blank" rel="noreferrer">LinkedIn</a>
-          <a class="linkbtn" href="https://github.com/" target="_blank" rel="noreferrer">GitHub</a>
-        </div>
-
-        <p class="small" style="margin-top:14px;">
-          Interests: math • systems • programming • research • design • music remixing
-        </p>
+    <header class="hero">
+      <div class="hero-text">
+        <h1>Adrianna Seeney</h1>
+    
+        <section class="about">
+          <p>
+            I’m Adrianna Seeney — a well-rounded technology professional who works comfortably
+            across product thinking and hands-on execution.
+          </p>
+    
+          <p>
+            My background spans business and finance (MBA: Finance &amp; Decision Science),
+            which shapes how I approach technology: I care about why systems exist,
+            how they’re used, and whether they actually support decisions.
+            I’m equally at home defining requirements, designing data models,
+            and writing the code to make them real.
+          </p>
+    
+          <p>
+            Much of what I know comes from working through real constraints —
+            broken processes, unclear ownership, and production systems under pressure.
+            This site reflects some of my work. Feel free to reach out if youd like to chat.
+          </p>
+    
+          <p class="small">
+            Outside of work, I enjoy research reading, graphic design, and creative projects —
+            curiosity tends to cross disciplines for me. 
+          </p>
+        </section>
       </div>
+    
+      <div class="hero-shots">
+        <div class="headshot">
+          <img src="img/1726011452074.jpg" > 
+        </div>
+        <div class="headshot">
+          <img src="img/quirky headshot.jpg">
+        </div>
+      </div>
+    </header>
+    
 
-      <aside class="aside">
-        <h2>What I’m optimizing for</h2>
-        <p class="small" style="margin-bottom:10px;">
-          Reliable metrics. Clean handoffs. Less chaos.
+    <section class="grid">
+      <a class="card" href="projects/equicite.html">
+        <div class="kicker">Data product</div>
+        <h2 class="title">Academic Research Paper Repository</h2>
+        <p class="desc">
+          A full-stack prototype for discovering and organizing academic research, focused on metadata quality and search UX.
         </p>
-        <p class="small">
-          I like work that turns “we don’t trust the numbers” into pipelines that run on schedule, dashboards that hold up,
-          and teams that can move without guesswork.
+        <p class="meta">HTML • JavaScript • DataTables • Product thinking</p>
+      </a>
+
+      <a class="card" href="projects/wnba-analytics.html">
+        <div class="kicker">Analytics engineering</div>
+        <h2 class="title">WNBA YouTube API Pipeline</h2>
+        <p class="desc">
+          Production-style ingestion + modeling of engagement metrics with validation guardrails to support reliable BI reporting.
         </p>
-      </aside>
-    </section>
+        <p class="meta">Python • YouTube API • SQL • Postgres • Power BI</p>
 
-    <section class="tiles">
-      <a class="tile" href="projects/">
-        <div class="kicker">Start here</div>
-        <h2 class="title">Projects</h2>
-        <p class="desc">Pipelines, dashboards, and data products (with writeups and architecture diagrams).</p>
+        <div class="thumb" aria-hidden="true">
+          <img src="img/project_architecture1.png" alt="Project architecture diagram preview">
+        </div>
       </a>
 
-      <a class="tile" href="projects/">
-        <div class="kicker">Work samples</div>
-        <h2 class="title">Case Studies</h2>
-        <p class="desc">Problem → reframe → system design → automation → impact. The thinking behind the build.</p>
-      </a>
-
-      <a class="tile" href="projects/">
-        <div class="kicker">In progress</div>
-        <h2 class="title">Independent Research</h2>
-        <p class="desc">Experiments and notes—where curiosity turns into prototypes.</p>
-      </a>
-
-      <a class="tile" href="projects/">
-        <div class="kicker">Occasionally</div>
-        <h2 class="title">Creative Work</h2>
-        <p class="desc">Design and other side quests. Not the main thing, but always in the mix.</p>
+      <a class="card" href="projects/dell-data-quality-case-study.html">
+        <div class="kicker">Case study</div>
+        <h2 class="title">Shift-Left Data Quality for Product Publishing (Dell)</h2>
+        <p class="desc">
+          Reframed a customer-facing production issue as a data quality problem and replaced manual QA with automated validation,
+          remediation, and release readiness artifacts.
+        </p>
+        <p class="meta">Python • SQLAlchemy • Data contracts • Observability • Power BI</p>
       </a>
     </section>
 
     <footer>
-      <div class="small">© <span id="year"></span> Adrianna Seeney</div>
-      <div class="small">
-        <a href="projects/">Projects</a>
+      <div>© <span id="year"></span> Adrianna Seeney</div>
+      <div>
+        <a href="https://adriseeney.github.io/">Home</a>
         &nbsp;•&nbsp;
-        <a href="https://www.linkedin.com/" target="_blank" rel="noreferrer">LinkedIn</a>
+        <a href="https://www.linkedin.com/in/adriseeney" target="_blank" rel="noreferrer">LinkedIn</a>
         &nbsp;•&nbsp;
-        <a href="https://github.com/" target="_blank" rel="noreferrer">GitHub</a>
+        <a href="https://github.com/aseeney" target="_blank" rel="noreferrer">GitHub</a>
       </div>
     </footer>
   </main>
